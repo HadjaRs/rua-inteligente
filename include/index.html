@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rua Inteligente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container-topo">
+        <div class="topo">
+            <p class="title">Rua Inteligente</p>
+            <span><img src="images/iconeW.png" alt="Ícone Wi-Fi"> AP Wi-Fi: 192.168.4.1</span>
+        </div>
+
+        <section class="sensor-card" aria-labelledby="sensor-title">
+            <h2 id="sensor-title">SENSORES EM TEMPO REAL</h2>
+            <div class="sensor-content">
+                <div class="sensor-gauge" role="img" aria-label="Indicador de luminosidade">
+                    <svg viewBox="0 0 100 100" aria-hidden="true">
+                        <circle class="sensor-gauge-track" cx="50" cy="50" r="42"></circle>
+                        <circle class="sensor-gauge-fill" cx="50" cy="50" r="42"></circle>
+                    </svg>
+                </div>
+                <div class="sensor-reading">
+                    <p class="sensor-value" id="ldr-value">--</p>
+                    <p class="sensor-name">LDR (Luminosidade)</p>
+                    <p class="sensor-status" id="sensor-status" aria-live="polite">Aguardando leitura...</p>
+                </div>
+            </div>
+            <svg class="sensor-wave" viewBox="0 0 600 50" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 30 C55 18 82 40 136 29 S216 19 267 27 S348 37 400 22 S482 30 530 17 S575 20 600 13" />
+            </svg>
+        </section>
+
+        <section class="light-card" aria-labelledby="light-title">
+            <div class="light-heading">
+                <div>
+                    <h2 id="light-title">ILUMINAÇÃO DO POSTE</h2>
+                    <p>LED RGB <span class="light-mode" id="light-mode">Modo automático</span></p>
+                </div>
+                <label class="light-switch" aria-label="Ligar ou desligar a iluminação">
+                    <input id="light-toggle" type="checkbox">
+                    <span class="switch-track" aria-hidden="true"></span>
+                </label>
+            </div>
+
+            <div class="light-colors">
+                <div class="color-label">
+                    <label for="light-color">COR DA ILUMINAÇÃO</label>
+                    <output id="color-value" for="light-color">#FACC15</output>
+                </div>
+                <div class="color-options" role="group" aria-label="Cores predefinidas">
+                    <button class="color-swatch is-selected" type="button" data-color="#FACC15" aria-label="Amarelo" aria-pressed="true"></button>
+                    <button class="color-swatch" type="button" data-color="#3B82F6" aria-label="Azul" aria-pressed="false"></button>
+                    <button class="color-swatch" type="button" data-color="#EC4899" aria-label="Rosa" aria-pressed="false"></button>
+                    <button class="color-swatch" type="button" data-color="#22C55E" aria-label="Verde" aria-pressed="false"></button>
+                    <label class="custom-color" for="light-color" title="Escolher outra cor">
+                        <input id="light-color" type="color" value="#facc15" aria-label="Escolher outra cor">
+                        <span aria-hidden="true">+</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="brightness-control">
+                <div class="color-label">
+                    <label for="light-brightness">Brilho</label>
+                    <output id="brightness-value" for="light-brightness">75%</output>
+                </div>
+                <input id="light-brightness" type="range" min="0" max="100" value="75">
+            </div>
+
+            <button class="auto-button" id="auto-mode" type="button">Voltar ao modo automático</button>
+        </section>
+
+        <section class="house-card" aria-labelledby="house-title">
+            <div class="house-copy">
+                <h2 id="house-title">ILUMINAÇÃO DA CASA</h2>
+                <p>LED Amarelo · <span id="house-status" aria-live="polite">Desligada</span></p>
+                <div class="house-control">
+                    <span aria-hidden="true">On</span>
+                    <label class="light-switch">
+                        <input id="house-toggle" type="checkbox" aria-label="Ligar ou desligar a iluminação da casa">
+                        <span class="switch-track" aria-hidden="true"></span>
+                    </label>
+                    <span aria-hidden="true">Off</span>
+                </div>
+            </div>
+            <img class="house-image" src="images/casa.png" alt="">
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

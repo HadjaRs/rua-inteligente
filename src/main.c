@@ -10,11 +10,12 @@
 #include "esp_netif.h" // faz a interface de rede da esp32 funcionar
 #include "esp_wifi.h" // cria o Access Point e gerencia a conexão Wi-Fi
 #include "nvs_flash.h" // é a biblioteca que permite gravar dados na memória flash da ESP32
+#include "web_server.h"
 
 #define RED_PIN   18
 #define GREEN_PIN 19
 #define BLUE_PIN  20
-#define TEST_LED_PIN GPIO_NUM_21
+#define CASA_LED_PIN GPIO_NUM_21
 #define CANAL_LDR ADC_CHANNEL_0  // GPIO 1 na ESP32-S2
 #define AP_SSID "PorteESP"
 #define AP_PASSWORD "maquete123"
@@ -55,17 +56,17 @@ void iniciarAccessPoint(void) {
     ESP_ERROR_CHECK(esp_wifi_start());
 
     printf("Access Point ativo: %s\n", AP_SSID);
-    printf("IP do Access Point: 192.168.4.1 (interface web ainda nao configurada)\n");
+    printf("IP do Access Point: 192.168.4.1\n");
 }
 
 void definirCores(uint8_t red, uint8_t green, uint8_t blue) {
     ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, red);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
 
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_1, green);
+    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_1, blue);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_1);
 
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_2, blue);
+    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_2, green);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_2);
 
     //ledc_set_duty = informa a ESP qual intensidade usar em um canal
@@ -89,7 +90,7 @@ void ligarPinosLed(void) {
     ledc_timer_config(&temporizador); //envia essas opções pra esp
 
     //config os 3 canais PWM e conecta cada um ao pino correspondente do RGB
-    gpio_num_t pinos[3] = {RED_PIN, GREEN_PIN, BLUE_PIN}; //cria uma lista com 3 pinos
+    gpio_num_t pinos[3] = {RED_PIN, GREEN_PIN, BLUE_PIN};
     for (int i = 0; i < 3; i++) {
         ledc_channel_config_t canal = { //estrutura p/ config dos canais
             .gpio_num = pinos[i],
@@ -131,24 +132,46 @@ void app_main(void) {
     iniciarAccessPoint();
     ligarPinosLed();
     ligarPinoLDR();
-    gpio_set_direction(TEST_LED_PIN, GPIO_MODE_OUTPUT); 
-    gpio_set_level(TEST_LED_PIN, 1);
+    iniciarServidorWeb();
+    gpio_set_direction(CASA_LED_PIN, GPIO_MODE_OUTPUT);
+    gpio_set_level(CASA_LED_PIN, 0);
     definirCores(0, 0, 0); // Começa desligado
 
     bool ledAtivo = false;
 
     while (1) {
         int ldrValor = lerLDRFiltrado();
+        ControleIluminacaoWeb controle;
+        bool casaLigada;
+        obterControleIluminacaoWeb(&controle);
+        obterEstadoCasaWeb(&casaLigada);
+        gpio_set_level(CASA_LED_PIN, casaLigada ? 1 : 0);
+
+        if (controle.manual) {
+            if (controle.enabled) {
+                definirCores(
+                    (uint8_t)(controle.red * controle.brightness / 100),
+                    (uint8_t)(controle.green * controle.brightness / 100),
+                    (uint8_t)(controle.blue * controle.brightness / 100)
+                );
+            } else {
+                definirCores(0, 0, 0);
+            }
+            ledAtivo = controle.enabled;
+        } else {
+            // Lógica com histerese
+            if (!ledAtivo && ldrValor < LIMIAR_ACENDER) {
+                definirCores(255, 255, 255); // Acende luz branca
+                ledAtivo = true;
+            } else if (ledAtivo && ldrValor > LIMIAR_APAGAR) {
+                definirCores(0, 0, 0);       // Apaga o LED
+                ledAtivo = false;
+            }
+        }
+
         printf("Leitura LDR (Média): %d | Estado LED: %s\n", ldrValor, ledAtivo ? "LIGADO" : "APAGADO");
 
-        // Lógica com histerese
-        if (!ledAtivo && ldrValor < LIMIAR_ACENDER) {
-            definirCores(255, 255, 255); // Acende luz branca
-            ledAtivo = true;
-        } else if (ledAtivo && ldrValor > LIMIAR_APAGAR) {
-            definirCores(0, 0, 0);       // Apaga o LED
-            ledAtivo = false;
-        }
+        atualizarLeituraWeb(ldrValor, ledAtivo);
 
         vTaskDelay(pdMS_TO_TICKS(200));
     }

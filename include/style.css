@@ -1,0 +1,465 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #f8f5f0;
+    color: #2c1810;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 32px 20px;
+}
+
+.container-topo {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.topo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "titulo ."
+        "status status";
+    align-items: center;
+    gap: 12px;
+}
+
+.title {
+    grid-area: titulo;
+    font-size: clamp(2rem, 8vw, 2.75rem);
+    font-weight: 750;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+}
+
+.topo img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.topo span {
+    grid-area: status;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-self: start;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: #85815f;
+    color: #fffaf2;
+    font-size: 0.95rem;
+}
+
+.sensor-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    margin-top: 20px;
+    padding: 18px 20px 24px;
+    border: 1px solid rgba(255, 247, 225, 0.12);
+    border-radius: 22px;
+    background: linear-gradient(145deg, #4a2a1c, #382015);
+    box-shadow: 0 12px 24px rgba(58, 33, 21, 0.16);
+    color: #fff4e2;
+}
+
+.sensor-card h2 {
+    margin-bottom: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.sensor-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sensor-gauge {
+    flex: 0 0 78px;
+    width: 78px;
+    aspect-ratio: 1;
+}
+
+.sensor-gauge svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform: rotate(130deg);
+}
+
+.sensor-gauge-track,
+.sensor-gauge-fill {
+    fill: none;
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-dasharray: 172.3 91.6;
+}
+
+.sensor-gauge-track {
+    stroke: #80624c;
+}
+
+.sensor-gauge-fill {
+    stroke: #80624c;
+    stroke-dasharray: 0 263.9;
+    filter: drop-shadow(0 0 5px rgba(255, 220, 164, 0.55));
+    transition: stroke-dasharray 0.4s ease, stroke 0.4s ease;
+}
+
+.sensor-reading {
+    min-width: 0;
+}
+
+.sensor-value {
+    font-size: clamp(2.5rem, 10vw, 3.25rem);
+    font-weight: 750;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+}
+
+.sensor-name,
+.sensor-status {
+    color: #e4d3bf;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.sensor-wave {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    opacity: 0.55;
+}
+
+.sensor-wave path {
+    fill: none;
+    stroke: #b7a078;
+    stroke-width: 2;
+}
+
+.light-card {
+    margin-top: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255, 247, 225, 0.12);
+    border-radius: 22px;
+    background:
+        radial-gradient(ellipse at 100% 0, rgba(183, 160, 120, 0.13), transparent 45%),
+        linear-gradient(145deg, #4a2a1c, #382015);
+    box-shadow: 0 12px 24px rgba(58, 33, 21, 0.16);
+    color: #fff4e2;
+}
+
+.house-card {
+    display: flex;
+    min-height: 126px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    overflow: hidden;
+    margin-top: 16px;
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 247, 225, 0.12);
+    border-radius: 22px;
+    background: linear-gradient(145deg, #4a2a1c, #382015);
+    box-shadow: 0 12px 24px rgba(58, 33, 21, 0.16);
+    color: #fff4e2;
+}
+
+.house-copy {
+    min-width: 0;
+}
+
+.house-card h2 {
+    font-size: 0.82rem;
+    font-weight: 750;
+    letter-spacing: 0.035em;
+}
+
+.house-card p {
+    margin-top: 3px;
+    color: #e4d3bf;
+    font-size: 0.82rem;
+}
+
+.house-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    color: #e9c99f;
+    font-size: 0.8rem;
+}
+
+.house-image {
+    flex: 0 0 auto;
+    width: 104px;
+    height: 104px;
+    object-fit: contain;
+}
+
+.light-heading,
+.color-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.light-heading h2 {
+    font-size: 0.82rem;
+    font-weight: 750;
+    letter-spacing: 0.035em;
+}
+
+.light-heading p {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 3px;
+    color: #e4d3bf;
+    font-size: 0.82rem;
+}
+
+.light-mode {
+    padding: 3px 8px;
+    border: 1px solid rgba(255, 247, 225, 0.2);
+    border-radius: 999px;
+    color: #e9c99f;
+    font-size: 0.68rem;
+}
+
+.light-switch {
+    position: relative;
+    display: inline-flex;
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+
+.light-switch input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.switch-track {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    border: 1px solid rgba(255, 247, 225, 0.2);
+    border-radius: 999px;
+    background: #80624c;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.switch-track::after {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f1dfca;
+    content: "";
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.light-switch input:checked + .switch-track {
+    background: #b7a078;
+    box-shadow: 0 0 12px rgba(255, 220, 164, 0.25);
+}
+
+.house-control .switch-track {
+    width: 44px;
+    height: 26px;
+}
+
+.house-control .switch-track::after {
+    width: 18px;
+    height: 18px;
+}
+
+.house-control .light-switch input:checked + .switch-track::after {
+    transform: translateX(18px);
+}
+
+.light-switch input:checked + .switch-track::after {
+    transform: translateX(20px);
+    background: #fff;
+}
+
+.light-switch input:focus-visible + .switch-track,
+.color-swatch:focus-visible,
+.custom-color:focus-within,
+.auto-button:focus-visible {
+    outline: 3px solid #e8c99a;
+    outline-offset: 3px;
+}
+
+.light-colors {
+    margin-top: 21px;
+}
+
+.color-label {
+    color: #e4d3bf;
+    font-size: 0.78rem;
+}
+
+.color-label label {
+    font-weight: 600;
+}
+
+.color-label output {
+    color: #cfb99f;
+    font-variant-numeric: tabular-nums;
+}
+
+.color-options {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-top: 11px;
+}
+
+.color-swatch,
+.custom-color {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    padding: 0;
+    border: 2px solid rgba(255, 255, 255, 0.24);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.color-swatch {
+    background: var(--swatch-color);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+}
+
+.color-swatch.is-selected {
+    box-shadow: 0 0 0 2px #4a2a1c, 0 0 0 4px #f1dfca;
+}
+
+.color-swatch[data-color="#FACC15"] { --swatch-color: #facc15; }
+.color-swatch[data-color="#3B82F6"] { --swatch-color: #3b82f6; }
+.color-swatch[data-color="#EC4899"] { --swatch-color: #ec4899; }
+.color-swatch[data-color="#22C55E"] { --swatch-color: #22c55e; }
+
+.custom-color {
+    position: relative;
+    overflow: hidden;
+    border-style: dashed;
+    background: linear-gradient(135deg, #b7a078, #80624c);
+}
+
+.custom-color input {
+    position: absolute;
+    inset: -5px;
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.custom-color span {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 400;
+    pointer-events: none;
+}
+
+.brightness-control {
+    margin-top: 22px;
+}
+
+.brightness-control input {
+    display: block;
+    width: 100%;
+    height: 6px;
+    margin-top: 12px;
+    border-radius: 999px;
+    background: #80624c;
+    accent-color: #d9b786;
+    cursor: pointer;
+    appearance: none;
+}
+
+.brightness-control input::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #d9b786;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    appearance: none;
+}
+
+.brightness-control input::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: #d9b786;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.auto-button {
+    margin-top: 18px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #d9b786;
+    font: inherit;
+    font-size: 0.78rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+.auto-button:hover {
+    color: #fff0d6;
+}
+
+@media (max-width: 360px) {
+    body {
+        padding: 24px 16px;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .sensor-card,
+    .light-card,
+    .house-card {
+        padding: 16px 16px 22px;
+    }
+
+    .house-image {
+        width: 84px;
+        height: 84px;
+    }
+
+    .sensor-gauge {
+        flex-basis: 68px;
+        width: 68px;
+    }
+}
